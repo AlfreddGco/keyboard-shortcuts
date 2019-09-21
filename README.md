@@ -1,4 +1,4 @@
-# Keyboard-Shortucts
+# Keyboard-Shortcuts
 C program for auto-writing with custom keyboard shortcuts in Linux systems
 
 ## Dependencies
