@@ -10,8 +10,8 @@ make install
 ```
 make
 ```
-## Runing
-./snippets
+## Running
+sudo ./snippets
 
 ## To do
 - Read commands from txt file
