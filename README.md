@@ -11,7 +11,9 @@ make install
 make
 ```
 ## Running
+```
 sudo ./snippets
+```
 
 ## To do
 - Read commands from txt file
