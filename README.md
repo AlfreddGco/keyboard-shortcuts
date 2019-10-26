@@ -15,10 +15,12 @@ make
 sudo ./snippets
 ```
 ## Usage
-windows + ctrl will make program start listening for command and start autowriting
+Windows + ctrl will make program start listening for command and start autowriting
 
-hardcoded commands:
+Hardcoded commands:
 - windows + ctrl + m = A01283966
+
+Program is closed just by listening "esc" key
 
 ## To do
 - Read commands from .txt file
