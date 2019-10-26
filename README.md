@@ -14,8 +14,12 @@ make
 ```
 sudo ./snippets
 ```
+## Usage
+windows + ctrl will make program start listening for command and start autowriting
+
+hardcoded commands:
+- windows + ctrl + m = A01283966
 
 ## To do
 - Read commands from .txt file
-- Obtain keyboard path through make installation
 - Install as a service through make file

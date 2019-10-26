@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdbool.h>
 #include <fcntl.h> // for open
@@ -59,8 +60,24 @@ static void sendWord(Display *disp, char* word, size_t word_length){
 
 int main(void) {
     Display *disp = XOpenDisplay(NULL);
+
+    // Read file and get keyboard path
+    char kbd_name[666];
+    FILE *fptr;
+    if ((fptr = fopen("config/kbd_name.txt", "r")) == NULL)
+    {
+        printf("Error! opening config file (keyboard name)");
+        exit(1);         
+    }
+    // reads text until newline 
+    fscanf(fptr,"%[^\n]", kbd_name);
+    fclose(fptr);
+
+    char kbd_path[666] = "/dev/input/by-path/"; 
+    strcat(kbd_path, kbd_name);
+    
     // The buffer path
-    const char *dev = "/dev/input/by-path/pci-0000:00:14.0-usb-0:5:1.0-event-kbd";
+    const char* dev = kbd_path;
     int fd;
     struct input_event ev;
     ssize_t n;
