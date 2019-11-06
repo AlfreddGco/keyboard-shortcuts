@@ -5,7 +5,7 @@ install:
 	sudo apt install libxtst-dev -y
 	ls /dev/input/by-path | grep kbd > config/kbd_name.txt
 
-compile: snippets.c
+compile: snippets.cpp
 	@echo "Compiling program..."
 	g++ -g -o snippets snippets.cpp -lX11 -lXtst
 
