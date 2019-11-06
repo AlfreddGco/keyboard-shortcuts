@@ -1,5 +1,5 @@
 # Keyboard-Shortcuts
-C program for auto-writing with custom keyboard shortcuts in Linux systems
+C++ program for auto-writing with custom keyboard shortcuts in Linux systems
 
 ## Dependencies
 The only dependency needed is libxtst-dev which you can install manually or using make file:
@@ -15,13 +15,16 @@ make
 sudo ./snippets
 ```
 ## Usage
-Windows + ctrl will make program start listening for command and start autowriting
+Commands are readed through the config/commands.txt file where commands are written in like:
+```
+command|keyword
+```
+where "command" is the shortcut that will be listened while pressing super+ctrl keys and "keyword" is the word or the sentence to be written automatically
 
-Hardcoded commands:
-- windows + ctrl + m = A01283966
+Super + ctrl will make program start listening for command and start autowriting
 
 Program is closed just by listening "esc" key
 
 ## To do
-- Read commands from .txt file
 - Install as a service through make file
+- Support for special characters

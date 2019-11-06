@@ -7,7 +7,7 @@ install:
 
 compile: snippets.c
 	@echo "Compiling program..."
-	gcc snippets.c -lX11 -lXtst -o snippets 
+	g++ -g -o snippets snippets.cpp -lX11 -lXtst
 
 clean:
 	@echo "Removing files..."
