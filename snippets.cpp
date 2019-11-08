@@ -11,6 +11,7 @@
 #include <X11/Intrinsic.h>
 #include <X11/extensions/XTest.h>
 
+#include <kbdMapping.h>
 
 static void getKbdPath(char* kbd_path){
     //Append known path
@@ -98,7 +99,7 @@ static void sendWord(Display *disp, char *command, size_t word_length, std::vect
                 value[0] = toWrite[i];
                 keysym = XStringToKeysym(value);
                 sendKey(disp, keysym, 0, isupper(value[0]));
-                sendKey(disp, 65, 0);
+                //sendKey(disp, 65, 0);
             }
             toWrite[0] = '\0';
         }
@@ -148,7 +149,7 @@ int main() {
         //ev.value 1 pressed, ev.value 0 released, 2 hold
         if (ev.type == EV_KEY){
             if(super_key==1 && ctrl_key==1 && ev.value == 1){
-                printf("Key %d has been pressed\n", ev.code);
+                //printf("Key %d has been pressed\n", ev.code);
                 //This codes correspond to linux framebuffer console (lfc)
                 //keycodes for x11 server are different
                 //For most values if we add 8 to the lfc the result is
