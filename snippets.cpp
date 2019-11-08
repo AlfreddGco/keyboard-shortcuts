@@ -32,7 +32,7 @@ static void getKbdPath(char* kbd_path){
     strcat(kbd_path, kbd_name);
 }
 
-static void sendKey (Display* disp, KeySym keysym, KeySym modsym, int isUpper){
+static void sendKey(Display* disp, KeySym keysym, KeySym modsym, int isUpper){
  KeyCode keycode = 0, modcode = 0;
  keycode = XKeysymToKeycode (disp, keysym);
 
@@ -61,20 +61,27 @@ static void sendKey (Display* disp, KeySym keysym, KeySym modsym, int isUpper){
  XTestGrabControl (disp, False);
 }
 
-static void sendWord(Display* disp, char* command, size_t word_length){
-    char toWrite[255] = "";
-    char value[2];
-    KeySym keysym;
-    value[1] = '\0';
-    if(!strcmp(command, "m")){
-        strcat(toWrite, "A01283966");
-        for (int i = 0; i < strlen(toWrite); i++){
-            value[0] = toWrite[i];
-            keysym = XStringToKeysym(value);
-            sendKey(disp, keysym, 0, isupper(value[0]));
-        }
-        toWrite[0] = '\0';
-    }
+static void sendKey (Display* disp, KeyCode keycode, KeySym modsym){
+ KeyCode modcode = 0;
+
+ XTestGrabControl (disp, True);
+
+ /* Generate modkey press */
+ if (modsym != 0) {
+  modcode = XKeysymToKeycode(disp, modsym);
+  XTestFakeKeyEvent (disp, modcode, True, 0);
+ }
+
+ /* Generate regular key press and release */
+ XTestFakeKeyEvent (disp, keycode, True, 0);
+ XTestFakeKeyEvent (disp, keycode, False, 0); 
+ 
+ /* Generate modkey release */
+ if (modsym != 0)
+  XTestFakeKeyEvent (disp, modcode, False, 0);
+ 
+ XSync (disp, False);
+ XTestGrabControl (disp, False);
 }
 
 static void sendWord(Display *disp, char *command, size_t word_length, std::vector<std::string> commands, std::vector<std::string> writings){
@@ -91,6 +98,7 @@ static void sendWord(Display *disp, char *command, size_t word_length, std::vect
                 value[0] = toWrite[i];
                 keysym = XStringToKeysym(value);
                 sendKey(disp, keysym, 0, isupper(value[0]));
+                sendKey(disp, 65, 0);
             }
             toWrite[0] = '\0';
         }
@@ -140,9 +148,11 @@ int main() {
         //ev.value 1 pressed, ev.value 0 released, 2 hold
         if (ev.type == EV_KEY){
             if(super_key==1 && ctrl_key==1 && ev.value == 1){
-                //printf("Key %d has been pressed\n", ev.code);
-                //For some reason here I have to add 8 to the keycode
-                //I guess it's because of my spanish keyboard 
+                printf("Key %d has been pressed\n", ev.code);
+                //This codes correspond to linux framebuffer console (lfc)
+                //keycodes for x11 server are different
+                //For most values if we add 8 to the lfc the result is
+                //the equivalent keycode in the x11 server
                 KeySym tempSym = XkbKeycodeToKeysym(disp, ev.code+8, 0, 0);
                 strcat(command, XKeysymToString(tempSym));
             }
