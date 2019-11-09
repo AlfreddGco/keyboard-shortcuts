@@ -11,7 +11,7 @@
 #include <X11/Intrinsic.h>
 #include <X11/extensions/XTest.h>
 
-#include <kbdMapping.h>
+#include "lib/kbdMapping.h"
 
 static void getKbdPath(char* kbd_path){
     //Append known path
