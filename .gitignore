@@ -1,5 +1,6 @@
 .vscode
 config/kbd_name.txt
+lib/*.o
 snippets
 test
 test.cpp
