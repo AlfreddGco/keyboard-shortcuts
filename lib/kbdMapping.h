@@ -10,6 +10,11 @@
 
 extern std::map<int, std::string> LFCString;
 
+struct KeyInfo{
+    int keycode = 0;
+    int altGr = 0;
+};
+
 void LFCInit();
 void LFCToString(unsigned int code, char* string);
-int StringToX11(Display *disp, char *string);
+KeyInfo StringToX11(Display *disp, char *string);

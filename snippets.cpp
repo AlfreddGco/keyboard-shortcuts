@@ -49,34 +49,38 @@ static void getCommands(std::vector<std::string> *commands, std::vector<std::str
   }
 }
 
-static void sendKey(Display *disp, KeyCode keycode, int isUpper)
+static void sendKey(Display *disp, KeyCode keycode, int altGr, int isUpper)
 {
   KeyCode modcode = 0;
   KeySym modsym = 0;
-  XTestGrabControl(disp, True);
 
+  XTestGrabControl(disp, True);
+  
+  if(isUpper != 0){
+    modsym = XK_Shift_R;
+  }
   /* Generate modkey press */
   if (modsym != 0)
   {
     modcode = XKeysymToKeycode(disp, modsym);
     XTestFakeKeyEvent(disp, modcode, True, 0);
   }
+  if(altGr != 0){
+    XTestFakeKeyEvent(disp, 0xcb, True, 0);//mode_switch
+    XTestFakeKeyEvent(disp, 0x32, True, 0);//shift_left
+  }
 
-  /* Generate regular key press and release */
-  if (isUpper != 0)
-  {
-    XTestFakeKeyEvent(disp, 50, True, 0);
-  }
   XTestFakeKeyEvent(disp, keycode, True, 0);
-  if (isUpper != 0)
-  {
-    XTestFakeKeyEvent(disp, 50, False, 0);
-  }
   XTestFakeKeyEvent(disp, keycode, False, 0);
 
+  if (altGr != 0){
+    XTestFakeKeyEvent(disp, 0xcb, False, 0);
+    XTestFakeKeyEvent(disp, 0x32, False, 0);
+  }
   /* Generate modkey release */
-  if (modsym != 0)
+  if (modsym != 0){
     XTestFakeKeyEvent(disp, modcode, False, 0);
+  }
 
   XSync(disp, False);
   XTestGrabControl(disp, False);
@@ -88,6 +92,7 @@ static void sendWord(Display *disp, char *command, size_t word_length, std::vect
   char value[2];
   KeySym keysym;
   KeyCode keycode;
+  KeyInfo key;
   value[1] = '\0';
   for (int i = 0; i < commands.size(); i++)
   {
@@ -97,7 +102,8 @@ static void sendWord(Display *disp, char *command, size_t word_length, std::vect
       for (int i = 0; i < strlen(toWrite); i++)
       {
         value[0] = toWrite[i];
-        sendKey(disp, StringToX11(disp, value), isupper(value[0]));
+        key = StringToX11(disp, value);
+        sendKey(disp, key.keycode, key.altGr, isupper(value[0]));
       }
       toWrite[0] = '\0';
     }

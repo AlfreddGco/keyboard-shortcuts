@@ -27,4 +27,4 @@ Program is closed just by listening "esc" key
 
 ## To do
 - Install as a service through make file
-- Support for special characters
+- Support for different keyboards mapping
