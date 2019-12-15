@@ -49,23 +49,19 @@ static void getCommands(std::vector<std::string> *commands, std::vector<std::str
   }
 }
 
-static void sendKey(Display *disp, KeyCode keycode, int altGr, int isUpper)
+static void sendKey(Display *disp, KeyCode keycode, int isAltGr, int isUpper)
 {
-  KeyCode modcode = 0;
+  KeyCode shiftModCode = XKeysymToKeycode(disp, XK_Shift_R);
   KeySym modsym = 0;
 
+  //grab disp control
   XTestGrabControl(disp, True);
   
   if(isUpper != 0){
-    modsym = XK_Shift_R;
+    XTestFakeKeyEvent(disp, shiftModCode, True, 0);
   }
-  /* Generate modkey press */
-  if (modsym != 0)
-  {
-    modcode = XKeysymToKeycode(disp, modsym);
-    XTestFakeKeyEvent(disp, modcode, True, 0);
-  }
-  if(altGr != 0){
+
+  if(isAltGr != 0){
     XTestFakeKeyEvent(disp, 0xcb, True, 0);//mode_switch
     XTestFakeKeyEvent(disp, 0x32, True, 0);//shift_left
   }
@@ -73,19 +69,18 @@ static void sendKey(Display *disp, KeyCode keycode, int altGr, int isUpper)
   XTestFakeKeyEvent(disp, keycode, True, 0);
   XTestFakeKeyEvent(disp, keycode, False, 0);
 
-  if (altGr != 0){
-    XTestFakeKeyEvent(disp, 0xcb, False, 0);
-    XTestFakeKeyEvent(disp, 0x32, False, 0);
-  }
-  /* Generate modkey release */
-  if (modsym != 0){
-    XTestFakeKeyEvent(disp, modcode, False, 0);
-  }
+  //altGr release
+  XTestFakeKeyEvent(disp, 0xcb, False, 0);
+  XTestFakeKeyEvent(disp, 0x32, False, 0);
+  
+  /* Generate shift release */
+  XTestFakeKeyEvent(disp, shiftModCode, False, 0);
 
+  //detach disp control
   XSync(disp, False);
   XTestGrabControl(disp, False);
 }
-
+//command is the keyboard shortcut send
 static void sendWord(Display *disp, char *command, size_t word_length, std::vector<std::string> commands, std::vector<std::string> writings)
 {
   char toWrite[255] = "";
@@ -103,6 +98,7 @@ static void sendWord(Display *disp, char *command, size_t word_length, std::vect
       {
         value[0] = toWrite[i];
         key = StringToX11(disp, value);
+        usleep(1000000/50);//50th of a second between each char
         sendKey(disp, key.keycode, key.altGr, isupper(value[0]));
       }
       toWrite[0] = '\0';
