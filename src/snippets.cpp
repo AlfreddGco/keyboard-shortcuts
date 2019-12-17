@@ -7,7 +7,7 @@
 #include <ctype.h>       // isupper()
 #include <linux/input.h> // EV_KEY
 
-#include "lib/kbdMapping.h"
+#include "kbdMapping.h"
 
 #include <X11/XKBlib.h>
 #include <X11/Intrinsic.h>
