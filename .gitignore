@@ -1,6 +1,7 @@
 .vscode
 config/kbd_name.txt
-lib/*.o
+src/*.o
+src/*.d
 snippets
 test
 test.cpp
