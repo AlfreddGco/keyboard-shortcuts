@@ -4,7 +4,7 @@ LDFLAGS = -lX11 -lXtst
 src = $(wildcard src/*.cpp)
 obj = $(src:.cpp=.o)
 deps = $(obj:.o=.d) #one dependency file for each source
-PREFIX = /usr/include/Keyboard-shortcuts
+PREFIX = /usr/include/keyboard-shortcuts
 .DEFAULT_GOAL := compile
 
 install:
@@ -16,9 +16,10 @@ install:
 # $< is first prerequisite, in this case: snippets
 install_service: snippets
 	mkdir -p $(DESTDIR)$(PREFIX)
-	cp $< $(DESTDIR)$(PREFIX)/snippets
+	cp $< $(DESTDIR)$(PREFIX)/
 	cp -R config/ $(DESTDIR)$(PREFIX)/
 	rm $(DESTDIR)$(PREFIX)/config/kbd_shortcuts.service
+	xhost +
 	cp config/kbd_shortcuts.service /etc/systemd/system/
 
 # @ variable containing target of rule
@@ -45,3 +46,4 @@ cleandeps:
 
 # This make file was made with the great help of
 # http://nuclear.mutantstargoat.com/articles/make/
+

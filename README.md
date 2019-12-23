@@ -26,5 +26,5 @@ Super + ctrl will make program start listening for command and start autowriting
 Program is closed just by listening "esc" key
 
 ## To do
-- Install as a service through make file
+- Configure service and config through scripts
 - Support for most languages

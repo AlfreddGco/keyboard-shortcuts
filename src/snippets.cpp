@@ -111,7 +111,11 @@ int main()
   LFCInit();
   LFCStringInit();
 
-  Display *disp = XOpenDisplay(NULL);
+  Display *disp = XOpenDisplay(":0");
+  if(disp == NULL){
+    printf("Error getting x11 display");
+    return 1;
+  }
   std::vector<std::string> commands, writings;
   getCommands(&commands, &writings);
 
@@ -129,10 +133,10 @@ int main()
 
   // Open the buffer
   fd = open(dev, O_RDONLY);
-  if (fd == -1)
-  {
+  if (fd == -1){
     printf("Error reading keyboard buffer. Remember to run this script as root\n");
-    return 1;
+    fflush(stdout);
+    return 0;
   }
 
   while (1)

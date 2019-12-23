@@ -4,10 +4,7 @@ StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-ExecStart=/usr/include/Keyboard-shortcuts/snippets
-User=root
-WorkingDirectory=/usr/include/Keyboard-shortcuts
-#StandardOutput=tty
-#TTYPath=/dev/pts/1
+ExecStart=/usr/include/keyboard-shortcuts/snippets
+WorkingDirectory=/usr/include/keyboard-shortcuts
 
 [Install]
