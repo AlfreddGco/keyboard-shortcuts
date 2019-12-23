@@ -4,6 +4,7 @@ LDFLAGS = -lX11 -lXtst
 src = $(wildcard src/*.cpp)
 obj = $(src:.cpp=.o)
 deps = $(obj:.o=.d) #one dependency file for each source
+PREFIX = /usr/include/Keyboard-shortcuts
 .DEFAULT_GOAL := compile
 
 install:
@@ -11,6 +12,14 @@ install:
 	sudo apt install libxtst-dev -y
 	ls /dev/input/by-path | grep kbd > config/kbd_name.txt
 
+.PHONY: install_service
+# $< is first prerequisite, in this case: snippets
+install_service: snippets
+	mkdir -p $(DESTDIR)$(PREFIX)
+	cp $< $(DESTDIR)$(PREFIX)/snippets
+	cp -R config/ $(DESTDIR)$(PREFIX)/
+	rm $(DESTDIR)$(PREFIX)/config/kbd_shortcuts.service
+	cp config/kbd_shortcuts.service /etc/systemd/system/
 
 # @ variable containing target of rule
 # ^ variable containing all deps of the rule

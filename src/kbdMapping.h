@@ -8,7 +8,6 @@
 #include <X11/Intrinsic.h>
 #include <X11/extensions/XTest.h>
 
-extern std::map<int, std::string> LFCString;
 
 struct KeyInfo{
     int keycode = 0;
@@ -16,5 +15,6 @@ struct KeyInfo{
 };
 
 void LFCInit();
-void LFCToString(unsigned int code, char* string);
+void LFCStringInit();
+std::string LFCToString(unsigned int code);
 KeyInfo StringToX11(Display *disp, char *string);

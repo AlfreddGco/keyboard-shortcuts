@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <bits/stdc++.h> //vector
-#include <fstream>       //file stream
 #include <fcntl.h>       // open()
 #include <unistd.h>      // close()
 #include <stdlib.h>      // exit()
@@ -21,7 +20,7 @@ static void getKbdPath(char *kbd_path)
   // Read file and get keyboard name
   char kbd_name[666];
   FILE *fptr;
-  if ((fptr = fopen("config/kbd_name.txt", "r")) == NULL)
+  if ((fptr = fopen("./config/kbd_name.txt", "r")) == NULL)
   {
     printf("Error! opening config file (keyboard name)");
     exit(1);
@@ -81,7 +80,7 @@ static void sendKey(Display *disp, KeyCode keycode, int isAltGr, int isUpper)
   XTestGrabControl(disp, False);
 }
 //command is the keyboard shortcut send
-static void sendWord(Display *disp, char *command, size_t word_length, std::vector<std::string> commands, std::vector<std::string> writings)
+static void sendWord(Display *disp, std::string command, size_t word_length, std::vector<std::string> commands, std::vector<std::string> writings)
 {
   char toWrite[255] = "";
   char value[2];
@@ -91,7 +90,7 @@ static void sendWord(Display *disp, char *command, size_t word_length, std::vect
   value[1] = '\0';
   for (int i = 0; i < commands.size(); i++)
   {
-    if (!strcmp(command, commands[i].c_str()))
+    if (command == commands[i])
     {
       strcat(toWrite, writings[i].c_str());
       for (int i = 0; i < strlen(toWrite); i++)
@@ -108,7 +107,10 @@ static void sendWord(Display *disp, char *command, size_t word_length, std::vect
 
 int main()
 {
+  //Initialize code change variables.
   LFCInit();
+  LFCStringInit();
+
   Display *disp = XOpenDisplay(NULL);
   std::vector<std::string> commands, writings;
   getCommands(&commands, &writings);
@@ -121,7 +123,7 @@ int main()
   int fd;
   struct input_event ev;
   ssize_t n;
-  char command[255] = "";
+  std::string command = "";
   int super_key = 0;
   int ctrl_key = 0;
 
@@ -144,38 +146,36 @@ int main()
         //printf("Key %d has been pressed\n", ev.code);
         //This codes correspond to linux framebuffer console (lfc)
         //keycodes for x11 server are different
-        //For most values if we add 8 to the lfc the result is
-        //the equivalent keycode in the x11 server
-        KeySym tempSym = XkbKeycodeToKeysym(disp, ev.code + 8, 0, 0);
-        strcat(command, XKeysymToString(tempSym));
+        command = LFCToString(ev.code);
       }
-      if (ev.code == 29 && (ev.value == 1 || ev.value == 2))
+      if (ev.code == 125 && (ev.value == 1 || ev.value == 2))
       {
         super_key = 1;
       }
-      else if (ev.code == 125 && (ev.value == 1 || ev.value == 2))
+      else if (ev.code == 29 && (ev.value == 1 || ev.value == 2))
       {
         ctrl_key = 1;
       }
-      else if (ev.code == 29 && ev.value == 0)
+      else if (ev.code == 125 && ev.value == 0)
       {
         super_key = 0;
       }
-      else if (ev.code == 125 && ev.value == 0)
+      else if (ev.code == 29 && ev.value == 0)
       {
         ctrl_key = 0;
       }
     }
 
-    if (!super_key && !ctrl_key && command[0] != '\0')
+    if (!super_key && !ctrl_key && command != "")
     {
-      sendWord(disp, command, strlen(command), commands, writings);
-      command[0] = '\0';
+      sendWord(disp, command, command.length(), commands, writings);
+      command = "";
     }
 
     // Since we want a safe way to kill the loop safely (closing the stream and all)
     if (ev.code == KEY_ESC)
     {
+      printf("Terminating program...\n");
       break;
     }
   }
