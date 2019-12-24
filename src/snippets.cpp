@@ -177,11 +177,11 @@ int main()
     }
 
     // Since we want a safe way to kill the loop safely (closing the stream and all)
-    if (ev.code == KEY_ESC)
-    {
-      printf("Terminating program...\n");
-      break;
-    }
+    //if (ev.code == KEY_ESC)
+    //{
+    //  printf("Terminating program...\n");
+    //  break;
+    //}
   }
 
   // And don't forget to close the buffer and exit safely
