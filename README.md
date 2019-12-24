@@ -23,8 +23,8 @@ where "command" is the shortcut that will be listened while pressing super+ctrl 
 
 Super + ctrl will make program start listening for command and start autowriting
 
-Program is closed just by listening "esc" key
+Program is closed by killing the process or by stopping the service
 
 ## To do
-- Configure service and config through scripts
+- Config through scripts
 - Support for most languages
