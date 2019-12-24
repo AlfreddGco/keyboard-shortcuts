@@ -1,4 +1,4 @@
-#/usr/bin/bash
+#!/bin/bash
 print_usage(){
 	echo "Usage: kbd-shortcuts [OPTIONS] [VALUES]"
 	echo
