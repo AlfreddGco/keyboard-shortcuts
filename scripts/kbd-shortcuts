@@ -1,0 +1,42 @@
+#/usr/bin/bash
+print_usage(){
+	echo "Usage: kbd-shortcuts [OPTIONS] [VALUES]"
+	echo
+	echo "   -a, --add=SHORTCUT|WRITTING		for adding a command"
+	echo "   -s, --show				for showing all shortcuts configured"
+	echo "   -r, --remove=SHORTCUT		shortcut for removing a shortcut"
+	echo
+}
+
+add_shortcut(){
+	echo "Adding shortcut..."
+}
+
+show_shortcuts(){
+	echo "Showing shortcuts..."
+}
+
+remove_shortcut(){
+	echo "Removing shortcut"
+}
+for arg in "$@"; do
+	shift
+	case "$arg" in
+		"--help") set -- "$@" "-h" ;;
+		"--add") set -- "$@" "-a" ;;
+		"--show") set -- "$@" "-s" ;;
+		"--remove") set -- "$@" "-r" ;;
+		*)	set -- "$@" "$arg"
+	esac
+done
+
+OPTIND=1
+while getopts ":hasr" opt
+do
+	case "$opt" in
+		"h") print_usage; exit 0;;
+		"a") add_shortcut; exit 0;;
+		"s") show_shortcuts; exit 0;;
+		"r") remove_shortcut; exit 0;;
+	esac
+done
