@@ -8,6 +8,11 @@ print_usage(){
 }
 
 add_shortcut(){
+	if [ "$EUID" -ne 0 ];then
+		echo "Please run this script with administrator privileges"
+		exit 0
+	fi
+
 	instruction=$1
 	if [[ $instruction == *"|"* ]]; then
 		echo "Adding shortcut $instruction..."
@@ -27,6 +32,11 @@ show_shortcuts(){
 }
 
 remove_shortcut(){
+	if [ "$EUID" -ne 0 ];then
+		echo "Please run this script with administrator privileges"
+		exit 0
+	fi
+
 	path="/usr/include/keyboard-shortcuts/config/"
 	file=$path"commands.txt"
 	command="$1|"
@@ -35,11 +45,6 @@ remove_shortcut(){
 	mv $path"tmp_file" $file
 	systemctl restart kbd-shortcuts.service
 }
-
-if [ "$EUID" -ne 0 ];then
-	echo "Please run this script with administrator privileges"
-	exit 0
-fi
 
 for arg in "$@"; do
 	shift

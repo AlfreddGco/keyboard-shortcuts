@@ -10,21 +10,23 @@ make install
 ```
 make
 ```
-## Running
+## Install as service
 ```
-sudo ./snippets
+sudo make install_service
 ```
 ## Usage
-Commands are readed through the config/commands.txt file where commands are written in like:
+For adding, removing and showing shortcuts run the next commmand after installing as service:
 ```
-command|keyword
+kbd-shortcuts --help
 ```
-where "command" is the shortcut that will be listened while pressing super+ctrl keys and "keyword" is the word or the sentence to be written automatically
 
 Super + ctrl will make program start listening for command and start autowriting
 
-Program is closed by killing the process or by stopping the service
+Program is closed by killing the process or by stopping the service with:
+```
+sudo systemctl stop kbd-shortcuts.service
+```
 
 ## To do
-- Config through scripts
+- Support for MacOS
 - Support for most languages
