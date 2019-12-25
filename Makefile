@@ -18,9 +18,11 @@ install_service: snippets
 	mkdir -p $(DESTDIR)$(PREFIX)
 	cp $< $(DESTDIR)$(PREFIX)/
 	cp -R config/ $(DESTDIR)$(PREFIX)/
-	rm $(DESTDIR)$(PREFIX)/config/kbd_shortcuts.service
+	rm $(DESTDIR)$(PREFIX)/config/kbd-shortcuts.service
 	xhost +
-	cp config/kbd_shortcuts.service /etc/systemd/system/
+	cp config/kbd-shortcuts.service /etc/systemd/system/
+	cp scripts/kbd-shortcuts /usr/bin/kbd-shortcuts
+	systemctl start kbd-shortcuts.service
 
 # @ variable containing target of rule
 # ^ variable containing all deps of the rule

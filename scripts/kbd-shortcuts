@@ -2,25 +2,45 @@
 print_usage(){
 	echo "Usage: kbd-shortcuts [OPTIONS] [VALUES]"
 	echo
-	echo "   -a, --add='SHORTCUT|WRITTING'		for adding a command"
+	echo "   -a, --add='SHORTCUT|WRITTING'	for adding a command. IMPORTANT to use quotation marks"
 	echo "   -s, --show				for showing all shortcuts configured"
 	echo "   -r, --remove=SHORTCUT		shortcut for removing a shortcut"
-	echo
 }
 
 add_shortcut(){
-	echo "Adding shortcut $1"
-	echo $1 >> /usr/include/keyboard-shortcuts/config/commands.txt
-	systemctl restart kbd_shortcuts.service
+	instruction=$1
+	if [[ $instruction == *"|"* ]]; then
+		echo "Adding shortcut $instruction..."
+		echo $instruction >> /usr/include/keyboard-shortcuts/config/commands.txt
+		systemctl restart kbd-shortcuts.service
+	else
+		echo "Not a valid shortcut"
+		echo "Make sure to include '|' and use quotation marks"
+		exit 0;
+	fi
+
 }
 
 show_shortcuts(){
 	echo "Showing shortcuts..."
+	cat /usr/include/keyboard-shortcuts/config/commands.txt
 }
 
 remove_shortcut(){
-	echo "Removing shortcut"
+	path="/usr/include/keyboard-shortcuts/config/"
+	file=$path"commands.txt"
+	command="$1|"
+	echo "Removing '$1' shortcut..."
+	grep -v "^$command" $file > $path"tmp_file" 
+	mv $path"tmp_file" $file
+	systemctl restart kbd-shortcuts.service
 }
+
+if [ "$EUID" -ne 0 ];then
+	echo "Please run this script with administrator privileges"
+	exit 0
+fi
+
 for arg in "$@"; do
 	shift
 	case "$arg" in
@@ -28,17 +48,18 @@ for arg in "$@"; do
 		"--add") set -- "$@" "-a" ;;
 		"--show") set -- "$@" "-s" ;;
 		"--remove") set -- "$@" "-r" ;;
-		*)	set -- "$@" "$arg"
+		*)	set -- "$@" "$arg";;
 	esac
 done
 
-OPTIND=1
 while getopts ":ha:sr:" opt
 do
 	case "$opt" in
 		"h") print_usage; exit 0;;
 		"a") add_shortcut $OPTARG; exit 0;;
 		"s") show_shortcuts; exit 0;;
-		"r") remove_shortcut; exit 0;;
+		"r") remove_shortcut $OPTARG; exit 0;;
+		: ) echo "Invalid option: $OPTARG requires an argument" 1>&2; exit 0;;
+		\?) echo "Invalid option $OPTARG" 1>&2; exit 0;;
 	esac
 done
