@@ -2,14 +2,16 @@
 print_usage(){
 	echo "Usage: kbd-shortcuts [OPTIONS] [VALUES]"
 	echo
-	echo "   -a, --add=SHORTCUT|WRITTING		for adding a command"
+	echo "   -a, --add='SHORTCUT|WRITTING'		for adding a command"
 	echo "   -s, --show				for showing all shortcuts configured"
 	echo "   -r, --remove=SHORTCUT		shortcut for removing a shortcut"
 	echo
 }
 
 add_shortcut(){
-	echo "Adding shortcut..."
+	echo "Adding shortcut $1"
+	echo $1 >> /usr/include/keyboard-shortcuts/config/commands.txt
+	systemctl restart kbd_shortcuts.service
 }
 
 show_shortcuts(){
@@ -31,11 +33,11 @@ for arg in "$@"; do
 done
 
 OPTIND=1
-while getopts ":hasr" opt
+while getopts ":ha:sr:" opt
 do
 	case "$opt" in
 		"h") print_usage; exit 0;;
-		"a") add_shortcut; exit 0;;
+		"a") add_shortcut $OPTARG; exit 0;;
 		"s") show_shortcuts; exit 0;;
 		"r") remove_shortcut; exit 0;;
 	esac
