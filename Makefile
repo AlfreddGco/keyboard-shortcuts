@@ -22,7 +22,9 @@ install_service: snippets
 	xhost +
 	cp config/kbd-shortcuts.service /etc/systemd/system/
 	cp scripts/kbd-shortcuts /usr/bin/kbd-shortcuts
+	systemctl daemon-reload
 	systemctl start kbd-shortcuts.service
+	systemctl enable kbd-shortcuts.service
 
 # @ variable containing target of rule
 # ^ variable containing all deps of the rule

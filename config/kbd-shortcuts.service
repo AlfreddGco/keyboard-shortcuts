@@ -8,3 +8,4 @@ ExecStart=/usr/include/keyboard-shortcuts/snippets
 WorkingDirectory=/usr/include/keyboard-shortcuts
 
 [Install]
+WantedBy=multi-user.target

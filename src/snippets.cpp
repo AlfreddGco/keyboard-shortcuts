@@ -12,6 +12,24 @@
 #include <X11/Intrinsic.h>
 #include <X11/extensions/XTest.h>
 
+int unsigned DEBUG = 0;
+
+std::string exec(const char *cmd)
+{
+  std::array<char, 128> buffer;
+  std::string result;
+  std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+  if (!pipe)
+  {
+    throw std::runtime_error("popen() failed!");
+  }
+  while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
+  {
+    result += buffer.data();
+  }
+  return result;
+}
+
 static void getKbdPath(char *kbd_path)
 {
   //Append known path
@@ -111,10 +129,22 @@ int main()
   LFCInit();
   LFCStringInit();
 
-  Display *disp = XOpenDisplay(NULL);
+  //Obtain display name
+  std::string disp_name = exec("who | grep -o ':.[[:space:]]'");
+  //Result has an \n and a space so we remove them
+  disp_name.pop_back();
+  disp_name.pop_back();
+
+  if(DEBUG==1){
+    //Add the | so we notice if there are blankspaces
+    printf("Openning display %s|\n", disp_name.c_str());
+  }
+
+  Display *disp = XOpenDisplay(disp_name.c_str());
+
   if(disp == NULL){
-    printf("Error getting x11 display");
-    return 0;
+    printf("Unable to open X11 display\n");
+    return 1;
   }
   std::vector<std::string> commands, writings;
   getCommands(&commands, &writings);

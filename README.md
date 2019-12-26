@@ -14,6 +14,8 @@ make
 ```
 sudo make install_service
 ```
+After this instalation, the service is enabled and program will start whenever the user logins. Also, the "kbd-shortcuts" command will be available in terminal
+
 ## Usage
 For adding, removing and showing shortcuts run the next commmand after installing as service:
 ```
@@ -30,3 +32,5 @@ sudo systemctl stop kbd-shortcuts.service
 ## To do
 - Support for MacOS
 - Support for most languages
+- Support for removing program and disable service
+- Better code (Better memory usage)
