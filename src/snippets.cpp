@@ -111,10 +111,10 @@ int main()
   LFCInit();
   LFCStringInit();
 
-  Display *disp = XOpenDisplay(":0");
+  Display *disp = XOpenDisplay(NULL);
   if(disp == NULL){
     printf("Error getting x11 display");
-    return 1;
+    return 0;
   }
   std::vector<std::string> commands, writings;
   getCommands(&commands, &writings);
