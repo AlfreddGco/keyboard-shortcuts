@@ -125,6 +125,9 @@ static void sendWord(Display *disp, std::string command, size_t word_length, std
 
 int main()
 {
+  if(DEBUG == 1){
+  	printf("Initializing mapping variables\n");
+  }
   //Initialize code change variables.
   LFCInit();
   LFCStringInit();
@@ -180,7 +183,10 @@ int main()
         //printf("Key %d has been pressed\n", ev.code);
         //This codes correspond to linux framebuffer console (lfc)
         //keycodes for x11 server are different
-        command = LFCToString(ev.code);
+        command += LFCToString(ev.code);
+		if(DEBUG == 1){
+			printf("Actual command: %s\n", command.c_str());
+		}
       }
       if (ev.code == 125 && (ev.value == 1 || ev.value == 2))
       {
