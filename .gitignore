@@ -1,5 +1,6 @@
 .vscode
-config/kbd_name.txt
+config/kbd_name*
+config/commands*
 src/*.o
 src/*.d
 snippets
