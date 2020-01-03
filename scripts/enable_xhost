@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if ! cat ~/.profile | grep -q "kbd-shortcuts"; then
+    echo "xhost not enabled"
+    @echo "##This line was addded by kbd-shortcuts service" >> ~/.profile
+    @echo "xhost + > /dev/null" >> ~/.profile
+else
+    echo "xhost already enabled in .profile"
+fi
