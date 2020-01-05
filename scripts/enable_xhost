@@ -1,9 +1,12 @@
 #!/bin/bash
 
-if ! cat ~/.profile | grep -q "kbd-shortcuts"; then
+if ! cat /etc/profile | grep -q "kbd-shortcuts"; then
     echo "xhost not enabled"
-    @echo "##This line was addded by kbd-shortcuts service" >> ~/.profile
-    @echo "xhost + > /dev/null" >> ~/.profile
+    echo "##This line was addded by kbd-shortcuts service" >> /etc/profile
+    echo -e "if [ '\$DISPLAY' != '' ]" >> /etc/profile
+    echo "then" >> /etc/profile
+    echo "  xhost +" >> /etc/profile
+    echo "fi" >> /etc/profile
 else
-    echo "xhost already enabled in .profile"
+    echo "xhost already enabled in /etc/profile"
 fi

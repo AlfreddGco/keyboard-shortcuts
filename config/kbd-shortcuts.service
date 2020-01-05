@@ -1,6 +1,7 @@
 [Unit]
 Description=Keyboard_shortcuts service
 StartLimitIntervalSec=0
+After=graphical.target
 
 [Service]
 Type=simple
@@ -8,4 +9,4 @@ ExecStart=/usr/include/keyboard-shortcuts/snippets
 WorkingDirectory=/usr/include/keyboard-shortcuts
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical.target
