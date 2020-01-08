@@ -134,6 +134,12 @@ int main()
 
   //Obtain display name
   std::string disp_name = exec("who | grep -o ':.[[:space:]]'");
+  unsigned int try_count = 0;
+  while(disp_name.length() <= 1 && try_count < 5){
+    usleep(1000000*60); //Sleep for 60 secs before trying again
+    disp_name = exec("who | grep -o ':.[[:space:]]'");
+    try_count++;
+  }
   //Result has an \n and a space so we remove them
   disp_name.pop_back();
   disp_name.pop_back();
