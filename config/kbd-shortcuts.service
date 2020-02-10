@@ -2,13 +2,13 @@
 Description=Keyboard_shortcuts service
 StartLimitIntervalSec=0
 After=graphical.target
-Restart=on-failure
-RestartSec=60
 
 [Service]
 Type=simple
 ExecStart=/usr/include/keyboard-shortcuts/snippets
 WorkingDirectory=/usr/include/keyboard-shortcuts
+Restart=on-failure
+RestartSec=60
 
 [Install]
 WantedBy=graphical.target
