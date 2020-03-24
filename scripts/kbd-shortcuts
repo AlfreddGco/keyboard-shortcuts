@@ -2,7 +2,7 @@
 print_usage(){
 	echo "Usage: kbd-shortcuts [OPTIONS] [VALUES]"
 	echo
-	echo "   -a, --add='SHORTCUT|WRITTING'	for adding a command. IMPORTANT to use quotation marks"
+	echo "   -a, --add 'COMMAND' 'WRITTING'	for adding a command. IMPORTANT to use quotation marks"
 	echo "   -s, --show				for showing all shortcuts configured"
 	echo "   -r, --remove=SHORTCUT		shortcut for removing a shortcut"
 }
