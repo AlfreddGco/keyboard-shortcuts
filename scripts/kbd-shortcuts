@@ -13,16 +13,10 @@ add_shortcut(){
 		exit 0
 	fi
 
-	instruction=$1
-	if [[ $instruction == *"|"* ]]; then
-		echo "Adding shortcut $instruction..."
-		echo $instruction >> /usr/include/keyboard-shortcuts/config/commands.txt
-		systemctl restart kbd-shortcuts.service
-	else
-		echo "Not a valid shortcut"
-		echo "Make sure to include '|' and use quotation marks"
-		exit 0;
-	fi
+	instruction=$1"|"$2
+	echo "Adding shortcut $instruction..."
+	echo $instruction >> /usr/include/keyboard-shortcuts/config/commands.txt
+	systemctl restart kbd-shortcuts.service
 
 }
 
@@ -61,7 +55,7 @@ while getopts ":ha:sr:" opt
 do
 	case "$opt" in
 		"h") print_usage; exit 0;;
-		"a") add_shortcut $OPTARG; exit 0;;
+		"a") add_shortcut "$2" "$3"; exit 0;;
 		"s") show_shortcuts; exit 0;;
 		"r") remove_shortcut $OPTARG; exit 0;;
 		: ) echo "Invalid option: $OPTARG requires an argument" 1>&2; exit 0;;
