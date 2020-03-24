@@ -10,7 +10,6 @@ PREFIX = /usr/include/keyboard-shortcuts
 install:
 	@echo "Installing dependencies..."
 	sudo apt install libxtst-dev -y
-	ls /dev/input/by-path | grep kbd > config/kbd_name.txt
 
 .PHONY: install_service
 # $< is first prerequisite, in this case: snippets
@@ -33,6 +32,7 @@ install_service: snippets
 compile: $(obj)
 	@echo "Compiling project..."
 	$(CC) -o snippets $^ $(CFLAGS) $(LDFLAGS)
+	ls /dev/input/by-path | grep kbd > config/kbd_name.txt
 
 -include $(deps) #include all dep files in the makefile
 
